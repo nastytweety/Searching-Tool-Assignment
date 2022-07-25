@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Searching_Tool_Assignment.Models;
 
 namespace IdentityVote.Models
 {
@@ -29,7 +30,7 @@ namespace IdentityVote.Models
         {
 
             builder.Entity<IdentityRole>().HasData(new IdentityRole { Id = "1", Name = "Admin", NormalizedName = "ADMIN".ToUpper() });
-            builder.Entity<IdentityRole>().HasData(new IdentityRole { Id = "2", Name = "User", NormalizedName = "MANAGER".ToUpper() });
+            builder.Entity<IdentityRole>().HasData(new IdentityRole { Id = "2", Name = "User", NormalizedName = "USER".ToUpper() });
 
 
             var hasher = new PasswordHasher<IdentityUser>();
@@ -59,7 +60,7 @@ namespace IdentityVote.Models
                     Password = "Adm//assign",
                     PasswordHash = hasher.HashPassword(null, "Adm//assign"),
                     PhoneNumber = "6947940268",
-                    FullName = "Giwrgos Chloros",
+                    FullName = "Test Tester",
                     Email = "nd@nd.gr",
                 }
             );
@@ -82,9 +83,19 @@ namespace IdentityVote.Models
                 }
             );
 
+            builder.Entity<Source>().HasData(
+               new Source
+               {
+                   Id = 1,
+                   Name = "Bitstamp",
+                   EndPoint = "https://www.bitstamp.net/api/v2/ticker/",
+                   Currency = "btcusd"
+               }
+           );
+
         }
 
-        //public DbSet<Election> Elections { get; set; }
+        public DbSet<Source> Sources { get; set; }
 
         //public DbSet<Vote> Votes { get; set; }
 

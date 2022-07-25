@@ -10,7 +10,7 @@ using System.Text;
 
 namespace IndentityVote.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -83,7 +83,7 @@ namespace IndentityVote.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterMember([FromBody] RegisterUserModel model)
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterUserModel model)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
