@@ -9,6 +9,6 @@ namespace Searching_Tool_Assignment.Models
         public string Name { get; set; }
         public string BaseURL { get; set; }
         public string PriceKeyword { get; set; }
-        public string DateKeyword { get; set; }
+        public string DateTimeKeyword { get; set; }
     }
 }

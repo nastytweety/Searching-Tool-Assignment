@@ -10,6 +10,7 @@ using Searching_Tool_Assignment.Models;
 using System.Net;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -27,7 +28,7 @@ namespace Searching_Tool_Assignment.Controllers
         [HttpGet("{SourceName}")]
         public async Task<ActionResult<List<Ticker>>> FetchPricesFromSource(string SourceName)
         {
-            List<Ticker> res = new List<Ticker>();
+            List<Ticker> result = new List<Ticker>();
             if (SourceName == null)
             {
                 return BadRequest();
@@ -54,16 +55,16 @@ namespace Searching_Tool_Assignment.Controllers
                     //Checking the response is successful or not which is sent using HttpClient
                     if (Res.IsSuccessStatusCode)
                     {
-                        //Response details recieved from web api
-                        var Response = Res.Content.ReadAsStringAsync().Result;
-                        //Deserializing the response recieved from web api and storing into the Employee list
-                        //var js = JsonConvert.DeserializeObject<Ticker>(Response);
+                        string Response = Res.Content.ReadAsStringAsync().Result;
+                        JObject obj = JObject.Parse(Response);
+                        var price = obj.SelectToken(source.PriceKeyword);
+                        var timestamp = obj.SelectToken(source.DateTimeKeyword);
                         Ticker tick = new Ticker();
                         tick.Source = source.Name;
                         tick.Currency = currency.CurrencyName;
-                        //tick.Price = 
-                        //tick.CreatedDate = js.CreatedDate;
-                        res.Add(tick);
+                        tick.Price = price.ToString();
+                        tick.CreatedDate = timestamp.ToString();
+                        result.Add(tick);
                         _context.Tickers.Add(tick);
                         await _context.SaveChangesAsync();
                     }
@@ -72,7 +73,7 @@ namespace Searching_Tool_Assignment.Controllers
 
                 }
             }
-            return res;
+            return result;
         }
 
         [HttpGet]

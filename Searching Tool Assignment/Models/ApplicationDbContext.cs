@@ -91,7 +91,7 @@ namespace IdentityVote.Models
                    Name = "Bitstamp",
                    BaseURL = "https://www.bitstamp.net/api/v2/ticker/",
                    PriceKeyword = "last",
-                   DateKeyword = "timestamp"
+                   DateTimeKeyword = "timestamp"
                }
            );
 
