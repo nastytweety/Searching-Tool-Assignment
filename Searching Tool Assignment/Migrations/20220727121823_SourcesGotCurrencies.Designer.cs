@@ -4,6 +4,7 @@ using IdentityVote.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Searching_Tool_Assignment.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220727121823_SourcesGotCurrencies")]
+    partial class SourcesGotCurrencies
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -105,17 +107,17 @@ namespace Searching_Tool_Assignment.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ca59c622-ea1f-4bad-b951-61f1a0378b22",
+                            ConcurrencyStamp = "68726dcb-e0c6-43be-8cfe-a181d9378108",
                             Email = "nd@nd.gr",
                             EmailConfirmed = false,
                             FullName = "Nikos Diakos",
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
                             Password = "Adm//assign",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHcBu3xUabFFGJ46f6bee2E74kUInnM3s9ZP+J61mqaWWsk1rGq2Mc4a+IUgBFzyxA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIiW7GG5LmRq1YEP3sJ3huROxkMcz/+rSVr2krjvjT3JsCDoN+tN7pDJWSCsO4CVag==",
                             PhoneNumber = "6947940268",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7709c69f-4ea8-464f-95d5-b423bd7cbab0",
+                            SecurityStamp = "57676179-d206-4ed7-9140-b5a6af9409f3",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
@@ -123,17 +125,17 @@ namespace Searching_Tool_Assignment.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb8",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "25ff0250-2297-4a7a-8d9e-7522a4f816b8",
+                            ConcurrencyStamp = "fd335828-dd4c-4ea6-8995-dd8ddf0fe089",
                             Email = "nd@nd.gr",
                             EmailConfirmed = false,
                             FullName = "Test Tester",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER",
                             Password = "Adm//assign",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPvZp0aTgq1T+S02u8o+VIwpnnxWTAcOYYnW7BUGRnwncNteJlPLdfIuIkQgCUXboA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECMgBTpTsfD/gk/Ki1/Ua0PSrpt/CIemhpHrwamOm/WsBE3iYPZtXfplbh2LIL61wA==",
                             PhoneNumber = "6947940268",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "aa0b292d-8ceb-4103-a9de-6560f706ff38",
+                            SecurityStamp = "1ff367fa-f627-416c-84e8-20bd38e52d00",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });
@@ -169,14 +171,14 @@ namespace Searching_Tool_Assignment.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "a89fc00c-986b-4116-988d-1fb546c7412e",
+                            ConcurrencyStamp = "ece9a0bd-3868-465c-a41d-c4cfbbb5e9c8",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "d3729a56-4dae-4c8d-a685-c46e6b501617",
+                            ConcurrencyStamp = "13f2ca92-710a-4bbc-b6f4-17749ef82bbc",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -316,7 +318,12 @@ namespace Searching_Tool_Assignment.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("SourceId")
+                        .HasColumnType("int");
+
                     b.HasKey("CurrencyId");
+
+                    b.HasIndex("SourceId");
 
                     b.ToTable("Currencies");
 
@@ -337,19 +344,14 @@ namespace Searching_Tool_Assignment.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("BaseURL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CurrencyId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("DateKeyword")
+                    b.Property<string>("EndPoint")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PriceKeyword")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -361,10 +363,9 @@ namespace Searching_Tool_Assignment.Migrations
                         new
                         {
                             Id = 1,
-                            BaseURL = "https://www.bitstamp.net/api/v2/ticker/",
-                            DateKeyword = "timestamp",
-                            Name = "Bitstamp",
-                            PriceKeyword = "last"
+                            CurrencyId = 1,
+                            EndPoint = "https://www.bitstamp.net/api/v2/ticker/",
+                            Name = "Bitstamp"
                         });
                 });
 
@@ -445,6 +446,18 @@ namespace Searching_Tool_Assignment.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Searching_Tool_Assignment.Models.Currency", b =>
+                {
+                    b.HasOne("Searching_Tool_Assignment.Models.Source", null)
+                        .WithMany("Currencies")
+                        .HasForeignKey("SourceId");
+                });
+
+            modelBuilder.Entity("Searching_Tool_Assignment.Models.Source", b =>
+                {
+                    b.Navigation("Currencies");
                 });
 #pragma warning restore 612, 618
         }

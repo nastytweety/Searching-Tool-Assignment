@@ -19,7 +19,6 @@ namespace IndentityVote.Controllers
         private readonly IConfiguration _configuration;
 
         public AuthController(
-            ILogger<AuthController> logger,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IConfiguration configuration)
@@ -40,7 +39,7 @@ namespace IndentityVote.Controllers
 
                 var authClaims = new List<Claim>
                 {
-                    //new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -62,9 +61,9 @@ namespace IndentityVote.Controllers
 
                     SigningCredentials = credentials,
 
-                    //Audience = _configuration["JWT:ValidAudience"],
+                    Audience = _configuration["JWT:ValidAudience"],
 
-                    //Issuer = _configuration["JWT:ValidIssuer"]
+                    Issuer = _configuration["JWT:ValidIssuer"]
 
                 };
 

@@ -36,7 +36,7 @@ namespace IdentityVote.Models
             var hasher = new PasswordHasher<IdentityUser>();
 
 
-            //Seeding the User to AspNetUsers table
+            //Seeding the Users to AspNetUsers table
             builder.Entity<ApplicationUser>().HasData(
                 new ApplicationUser
                 {
@@ -83,23 +83,35 @@ namespace IdentityVote.Models
                 }
             );
 
+            //Seeding sources
             builder.Entity<Source>().HasData(
                new Source
                {
                    Id = 1,
                    Name = "Bitstamp",
-                   EndPoint = "https://www.bitstamp.net/api/v2/ticker/",
-                   Currency = "btcusd"
+                   BaseURL = "https://www.bitstamp.net/api/v2/ticker/",
+                   PriceKeyword = "last",
+                   DateKeyword = "timestamp"
                }
            );
+
+            //Seeding currencies
+            builder.Entity<Currency>().HasData(
+               new Currency
+               {
+                   CurrencyId = 1,
+                   CurrencyName = "Bitcoin to USD",
+                   Extension = "btcusd"
+               }
+           ); ;
+
+
 
         }
 
         public DbSet<Source> Sources { get; set; }
-
-        //public DbSet<Vote> Votes { get; set; }
-
-        //public DbSet<Organization> Organizations { get; set; }
+        public DbSet<Ticker> Tickers { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
 
         //public DbSet<Party> Parties { get; set; }
     }

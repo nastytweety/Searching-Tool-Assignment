@@ -22,9 +22,9 @@ namespace Searching_Tool_Assignment.Controllers
             _context = context;
         }
 
-        // GET: api/Sources
+        // GET: Sources
         [HttpGet]
-        [Authorize(Roles = UserRoles.User)]
+        [Authorize(Roles = UserRoles.User+","+UserRoles.Admin)]
         public async Task<ActionResult<IEnumerable<Source>>> GetSources()
         {
           if (_context.Sources == null)
@@ -34,9 +34,9 @@ namespace Searching_Tool_Assignment.Controllers
             return await _context.Sources.ToListAsync();
         }
 
-        // GET: api/Sources/5
+        // GET: Sources/5
         [HttpGet("{id}")]
-        [Authorize(Roles = UserRoles.User)]
+        [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         public async Task<ActionResult<Source>> GetSource(int id)
         {
           if (_context.Sources == null)
@@ -53,11 +53,11 @@ namespace Searching_Tool_Assignment.Controllers
             return source;
         }
 
-        // PUT: api/Sources/5
+        // PUT: Sources/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(Roles = UserRoles.Admin)]
-        public async Task<IActionResult> PutSource(int id, Source source)
+        public async Task<IActionResult> EditSource(int id, Source source)
         {
             if (id != source.Id)
             {
@@ -85,11 +85,11 @@ namespace Searching_Tool_Assignment.Controllers
             return NoContent();
         }
 
-        // POST: api/Sources
+        // POST: Sources
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
-        public async Task<ActionResult<Source>> PostSource(Source source)
+        public async Task<ActionResult<Source>> AddSource(Source source)
         {
           if (_context.Sources == null)
           {
@@ -101,7 +101,7 @@ namespace Searching_Tool_Assignment.Controllers
             return CreatedAtAction("GetSource", new { id = source.Id }, source);
         }
 
-        // DELETE: api/Sources/5
+        // DELETE: Sources/5
         [HttpDelete("{id}")]
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteSource(int id)

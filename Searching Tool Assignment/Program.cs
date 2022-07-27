@@ -16,6 +16,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 });
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
