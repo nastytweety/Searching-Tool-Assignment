@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Searching_Tool_Assignment.Models;
 
@@ -11,9 +12,10 @@ using Searching_Tool_Assignment.Models;
 namespace Searching_Tool_Assignment.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220728071441_Sources-Added")]
+    partial class SourcesAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,14 +54,14 @@ namespace Searching_Tool_Assignment.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "3a885e86-f585-4249-9991-9b10f30552f0",
+                            ConcurrencyStamp = "6d04d167-3a80-441f-914e-f81012cbac33",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "7cbc7b6a-55b3-46dd-a43f-80dd3a79f00e",
+                            ConcurrencyStamp = "d8d078fc-3501-40c6-8162-64ce48165317",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -266,16 +268,16 @@ namespace Searching_Tool_Assignment.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "61e181b0-6c5e-408b-85c7-917a203651b0",
+                            ConcurrencyStamp = "73f8b08b-0664-4587-a9bf-7192170810f1",
                             Email = "nd@nd.gr",
                             EmailConfirmed = false,
                             FullName = "Nikos Diakos",
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
                             Password = "Adm//assign",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHUSSd8Sjxcqihi22Hk/J1Jz6gPb96tg89mhbEOHUfbax8SxI+djRAhxPUvIdmTqaA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDP1Vb2LtH/jW2cAoGXYO/oOOvWMfK0TUuuVvC9cPdUsctsfvJz8xrrIdeHq7qiWKQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "4d2eb480-f31f-421b-9242-35cbca9192c7",
+                            SecurityStamp = "b8668a37-ddd7-4b01-84ae-c068e080dd66",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
@@ -283,16 +285,16 @@ namespace Searching_Tool_Assignment.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb8",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "d896513b-5462-4728-b2df-2fe2a8ea095d",
+                            ConcurrencyStamp = "2ed1843a-aefc-4ddb-933f-00bf4c8f539b",
                             Email = "nd@nd.gr",
                             EmailConfirmed = false,
                             FullName = "Test Tester",
                             LockoutEnabled = false,
                             NormalizedUserName = "USER",
                             Password = "Adm//assign",
-                            PasswordHash = "AQAAAAEAACcQAAAAEGNuXYtaz9zkkBdo6J5PXESfbjvDiBNXl9g+U8ZWOvikKaSRjN9VK1aYT6QJYRDmLA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECoOSXCkMCmjRDP3KuLl0Z92+eF74KT+A6119hqPEYjwhcaqVi9a6PYOwj1mEvJYHg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "32b1a196-1d9c-428f-aae6-f8e348d83b79",
+                            SecurityStamp = "e56f6bcf-e718-4a5f-8ff3-7a281e2c132c",
                             TwoFactorEnabled = false,
                             UserName = "user"
                         });
@@ -369,7 +371,7 @@ namespace Searching_Tool_Assignment.Migrations
                             Id = 2,
                             BaseURL = "https://api.bitfinex.com/v1/pubticker/",
                             DateTimeKeyword = "timestamp",
-                            Name = "Bitfindex",
+                            Name = "Bifindex",
                             PriceKeyword = "last_price"
                         });
                 });

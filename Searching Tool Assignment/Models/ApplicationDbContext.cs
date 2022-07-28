@@ -37,7 +37,6 @@ namespace Searching_Tool_Assignment.Models
                     NormalizedUserName = "ADMIN",
                     Password = "Adm//assign",
                     PasswordHash = hasher.HashPassword(null, "Adm//assign"),
-                    PhoneNumber = "6947940268",
                     FullName = "Nikos Diakos",
                     Email = "nd@nd.gr",
                 }
@@ -51,7 +50,6 @@ namespace Searching_Tool_Assignment.Models
                     NormalizedUserName = "USER",
                     Password = "Adm//assign",
                     PasswordHash = hasher.HashPassword(null, "Adm//assign"),
-                    PhoneNumber = "6947940268",
                     FullName = "Test Tester",
                     Email = "nd@nd.gr",
                 }
@@ -91,7 +89,7 @@ namespace Searching_Tool_Assignment.Models
                new Source
                {
                    Id = 2,
-                   Name = "Bifindex",
+                   Name = "Bitfindex",
                    BaseURL = "https://api.bitfinex.com/v1/pubticker/",
                    PriceKeyword = "last_price",
                    DateTimeKeyword = "timestamp"
