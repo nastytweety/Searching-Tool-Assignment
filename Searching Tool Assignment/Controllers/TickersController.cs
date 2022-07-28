@@ -17,7 +17,7 @@ namespace Searching_Tool_Assignment.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    
+
     public class TickersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -32,7 +32,7 @@ namespace Searching_Tool_Assignment.Controllers
         [HttpGet("{SourceName}")]
         public async Task<ActionResult<List<Ticker>>> FetchPricesFromSource(string SourceName)
         {
-            
+
             if (SourceName == null)
             {
                 return BadRequest();
@@ -59,17 +59,15 @@ namespace Searching_Tool_Assignment.Controllers
                         result.Add(tick);
                         _context.Tickers.Add(tick);
                         await _context.SaveChangesAsync();
-                    }                  
+                    }
                 }
             }
             return result;
         }
 
-        [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
-        // [HttpGet("{SourceName}/{Date}/{OrderByPrice}/{OrderByDate}")]
+        //[Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         [HttpGet]
-        [Route("{SourceName}/{Date}/{OrderByPrice}/{OrderByDate}")]
-        public async Task<ActionResult<List<Ticker>>> FetchPricesHistory(string? SourceName,string? Date,bool OrderByPrice,bool OrderByDate)
+        public async Task<ActionResult<List<Ticker>>> FetchPricesHistory([FromQuery] string? FilterBySource,[FromQuery]string? FilterByDate, [FromQuery]string? OrderBy)
         {
             if (_context.Tickers == null)
             {
@@ -83,55 +81,57 @@ namespace Searching_Tool_Assignment.Controllers
                 return NotFound();
             }
 
-            if(SourceName!=null)
+            if(FilterBySource != null)
             {
-                if(_context.Sources.Where(x => x.Name == SourceName).FirstOrDefault() != null)
+                if(_context.Sources.Where(x => x.Name == FilterBySource).FirstOrDefault() != null)
                 {
-                    if(OrderByPrice)
-                    {
-                        return tickers.Where(x => x.Source == SourceName).OrderBy(x=>x.Price).ToList();
-                    }
-                    else if(OrderByDate)
-                    {
-                        return tickers.Where(x => x.Source == SourceName).OrderBy(x => x.CreatedDate).ToList();
-                    }
-                    else
-                    {
-                        return tickers.Where(x => x.Source == SourceName).ToList();
-                    }
+                    tickers = tickers.Where(x => x.Source == FilterBySource).ToList();
                 }
                 else
                 {
                     return NotFound();
                 }
             }
-
-            if(Date!=null)
+            if(FilterByDate != null)
             {
-                if(tickers.Where(x => x.CreatedDate == Date).ToList()!=null)
+                if(tickers.Where(x => x.CreatedDate == FilterByDate).ToList()!=null)
                 {
-                    if(OrderByPrice)
-                    {
-                        return tickers.Where(x => x.CreatedDate == Date).OrderBy(x => x.Price).ToList();
-                    }
-                    else if(OrderByDate)
-                    {
-                        return tickers.Where(x => x.CreatedDate == Date).OrderBy(x => x.CreatedDate).ToList();
-                    }
-                    else
-                    {
-                        return tickers.Where(x => x.CreatedDate == Date).ToList();
-                    }
+                    tickers = tickers.Where(x => x.CreatedDate == FilterByDate).ToList();
                 }
                 else
                 {
                     return NotFound();
                 }
             }
-
+            if (OrderBy != null)
+            {
+                if(OrderBy == "Price"|| OrderBy == "price")
+                {
+                    if (tickers != null)
+                    {
+                        tickers = tickers.OrderBy(x => x.Price).ToList();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+                if(OrderBy == "Date" || OrderBy == "date")
+                {
+                    if (tickers != null)
+                    {
+                        tickers = tickers.OrderBy(x => x.CreatedDate).ToList();
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+            }
             return tickers;
         }
 
+        [HttpDelete]
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeletePricesHistory()
         {
