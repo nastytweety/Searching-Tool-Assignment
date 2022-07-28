@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace IdentityVote.Models
+namespace Searching_Tool_Assignment.Models
 {
     public class ApplicationUser : IdentityUser
     {

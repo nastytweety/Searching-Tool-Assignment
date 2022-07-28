@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Searching_Tool_Assignment.Models;
 
-namespace IdentityVote.Models
+namespace Searching_Tool_Assignment.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -15,14 +15,6 @@ namespace IdentityVote.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
-
-            //builder.Entity<Party>()
-            //   .HasOne(e => e.Election)
-            //   .WithOne()
-            //   .HasForeignKey<Party>(e => e.ElectionId)
-            //   .OnDelete(DeleteBehavior.Cascade);
-
             Seed(builder);
         }
 
@@ -95,6 +87,17 @@ namespace IdentityVote.Models
                }
            );
 
+            builder.Entity<Source>().HasData(
+               new Source
+               {
+                   Id = 2,
+                   Name = "Bifindex",
+                   BaseURL = "https://api.bitfinex.com/v1/pubticker/",
+                   PriceKeyword = "last_price",
+                   DateTimeKeyword = "timestamp"
+               }
+            );
+
             //Seeding currencies
             builder.Entity<Currency>().HasData(
                new Currency
@@ -112,7 +115,5 @@ namespace IdentityVote.Models
         public DbSet<Source> Sources { get; set; }
         public DbSet<Ticker> Tickers { get; set; }
         public DbSet<Currency> Currencies { get; set; }
-
-        //public DbSet<Party> Parties { get; set; }
     }
 }

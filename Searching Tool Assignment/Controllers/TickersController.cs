@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Searching_Tool_Assignment.Services;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -19,16 +20,17 @@ namespace Searching_Tool_Assignment.Controllers
     public class TickersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
-        public TickersController(ApplicationDbContext context)
+        private readonly IApplicationService _applicationService;
+        public TickersController(ApplicationDbContext context, IApplicationService appservice)
         {
             _context = context;
+            _applicationService = appservice;
         }
 
         [HttpGet("{SourceName}")]
         public async Task<ActionResult<List<Ticker>>> FetchPricesFromSource(string SourceName)
         {
-            List<Ticker> result = new List<Ticker>();
+            
             if (SourceName == null)
             {
                 return BadRequest();
@@ -40,37 +42,22 @@ namespace Searching_Tool_Assignment.Controllers
 
             Source source = await _context.Sources.Where(x => x.Name == SourceName).SingleAsync();
             List<Currency> currencies = await _context.Currencies.ToListAsync();
+            List<Ticker> result = new List<Ticker>();
 
-            using (var client = new HttpClient())
+            using (var client = _applicationService.GetHttpClient(source.BaseURL))
             {
-                //Passing service url
-                client.BaseAddress = new Uri(source.BaseURL);
-                client.DefaultRequestHeaders.Clear();
-                //Define request data format
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                //Sending request to find web api REST service resource GetAllEmployees using HttpClient
                 foreach (var currency in currencies)
                 {
                     HttpResponseMessage Res = await client.GetAsync(currency.Extension);
-                    //Checking the response is successful or not which is sent using HttpClient
                     if (Res.IsSuccessStatusCode)
                     {
                         string Response = Res.Content.ReadAsStringAsync().Result;
                         JObject obj = JObject.Parse(Response);
-                        var price = obj.SelectToken(source.PriceKeyword);
-                        var timestamp = obj.SelectToken(source.DateTimeKeyword);
-                        Ticker tick = new Ticker();
-                        tick.Source = source.Name;
-                        tick.Currency = currency.CurrencyName;
-                        tick.Price = price.ToString();
-                        tick.CreatedDate = timestamp.ToString();
+                        Ticker tick = _applicationService.GetTicker(obj, source, currency.CurrencyName);
                         result.Add(tick);
                         _context.Tickers.Add(tick);
                         await _context.SaveChangesAsync();
-                    }
-
-                   
-
+                    }                  
                 }
             }
             return result;

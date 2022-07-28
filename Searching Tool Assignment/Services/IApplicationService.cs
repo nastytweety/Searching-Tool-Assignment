@@ -1,11 +1,13 @@
-﻿using Searching_Tool_Assignment.Models;
+﻿using Newtonsoft.Json.Linq;
+using Searching_Tool_Assignment.Models;
 
 namespace Searching_Tool_Assignment.Services
 {
     public interface IApplicationService
     {
-        public List<Currency> GetCurrencies();
-        public HttpClient GetHttpClient();
-        public Ticker GetTicker(string Response);
+        public DateTime UnixTimeStampToDateTime(double UnixTimeStamp);
+        public Task<List<Currency>> GetCurrencies();
+        public HttpClient GetHttpClient(string BaseUrl);
+        public Ticker GetTicker(JObject Obj, Source source, string CurrencyName);
     }
 }
