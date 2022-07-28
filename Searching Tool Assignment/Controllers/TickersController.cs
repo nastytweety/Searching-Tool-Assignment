@@ -65,9 +65,9 @@ namespace Searching_Tool_Assignment.Controllers
             return result;
         }
 
-        //[Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
+        [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         [HttpGet]
-        public async Task<ActionResult<List<Ticker>>> FetchPricesHistory([FromQuery] string? FilterBySource,[FromQuery]string? FilterByDate, [FromQuery]string? OrderBy)
+        public async Task<ActionResult<List<Ticker>>> FetchPricesHistory([FromQuery] string? FilterBySource,[FromQuery]string? FilterByDate, [FromQuery]string? OrderBy, [FromQuery]int? Page)
         {
             if (_context.Tickers == null)
             {
@@ -128,7 +128,13 @@ namespace Searching_Tool_Assignment.Controllers
                     }
                 }
             }
-            return tickers;
+            if(Page != null && Page>=1)
+            {
+                var PageResults = 5f;
+                var TotalPages = Math.Ceiling(tickers.Count() / PageResults);
+                tickers = tickers.Skip((Page.Value - 1) * (int)PageResults).Take((int)PageResults).ToList();
+            }
+            return Ok(tickers);
         }
 
         [HttpDelete]

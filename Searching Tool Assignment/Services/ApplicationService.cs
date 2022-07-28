@@ -14,11 +14,11 @@ namespace Searching_Tool_Assignment.Services
         {
             _context = context;
         }
-        public DateTime UnixTimeStampToDateTime(double UnixTimeStamp)
+        public string UnixTimeStampToDateTime(double UnixTimeStamp)
         {
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dateTime = dateTime.AddSeconds(UnixTimeStamp).ToLocalTime();
-            return dateTime;
+            return dateTime.ToShortDateString();
         }
 
         public async Task<List<Currency>> GetCurrencies()
@@ -39,11 +39,11 @@ namespace Searching_Tool_Assignment.Services
             double price = Convert.ToDouble(Obj.SelectToken(source.PriceKeyword));
             double timestamp = Convert.ToDouble(Obj.SelectToken(source.DateTimeKeyword));
             price = Math.Round(price, 2);
-            DateTime windowstime = UnixTimeStampToDateTime(timestamp);
+            string windowstime = UnixTimeStampToDateTime(timestamp);
             ticker.Source = source.Name;
             ticker.Currency = CurrencyName;
             ticker.Price = price.ToString();
-            ticker.CreatedDate = windowstime.ToString();
+            ticker.CreatedDate = windowstime;
             return ticker;
         }
     }
