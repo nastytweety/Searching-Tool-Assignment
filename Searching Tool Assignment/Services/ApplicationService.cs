@@ -1,5 +1,4 @@
-﻿using IdentityVote.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
 using Searching_Tool_Assignment.Models;
 using System.Net.Http.Headers;
