@@ -84,7 +84,7 @@ namespace Searching_Tool_Assignment.Controllers
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User already exists!" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { Status = "Error", Message = "User already exists!" });
 
             ApplicationUser user = new()
             {
@@ -98,13 +98,13 @@ namespace Searching_Tool_Assignment.Controllers
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
             if (await _roleManager.RoleExistsAsync(model.Role))
             {
                 await _userManager.AddToRoleAsync(user, model.Role);
             }
-            return Ok(new Response { Status = "Success", Message = "User created successfully!" });
+            return Ok(new ResponseDTO { Status = "Success", Message = "User created successfully!" });
         }
     }
 }

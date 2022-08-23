@@ -19,11 +19,6 @@ namespace Searching_Tool_Assignment.Services
             dateTime = dateTime.AddSeconds(UnixTimeStamp).ToLocalTime();
             return dateTime.ToShortDateString();
         }
-
-        public async Task<List<Currency>> GetCurrencies()
-        {
-            return await _context.Currencies.ToListAsync();
-        }
         public HttpClient GetHttpClient(string BaseUrl) 
         {
             HttpClient client = new HttpClient();
