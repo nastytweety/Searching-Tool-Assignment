@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Searching_Tool_Assignment.Models;
+using Searching_Tool_Assignment.DTOs;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -27,7 +28,7 @@ namespace Searching_Tool_Assignment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -79,7 +80,7 @@ namespace Searching_Tool_Assignment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterUserModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
@@ -87,11 +88,11 @@ namespace Searching_Tool_Assignment.Controllers
 
             ApplicationUser user = new()
             {
+                FullName = model.FullName,
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
                 Password = model.Password,
-                FullName = model.FullName,
                 FirstName = model.FirstName,
                 LastName = model.LastName
             };

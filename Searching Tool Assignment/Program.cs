@@ -20,19 +20,7 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
 });
 
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        builder =>
-        {
-            builder.WithOrigins(
-              "http://localhost:5000",
-              "https://localhost:5001",
-              "http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
-        });
-});
 
-//builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c => 
     {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
