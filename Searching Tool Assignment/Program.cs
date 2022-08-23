@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Searching_Tool_Assignment.Services;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Searching_Tool_Assignment.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,9 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+//Adding AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
 // Adding Authentication
 builder.Services.AddAuthentication(options =>

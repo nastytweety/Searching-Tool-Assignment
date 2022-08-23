@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using Searching_Tool_Assignment.Models;
 using Searching_Tool_Assignment.DTOs;
+using AutoMapper;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -16,15 +17,18 @@ namespace Searching_Tool_Assignment.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         [HttpPost]
@@ -72,8 +76,7 @@ namespace Searching_Tool_Assignment.Controllers
                 return Ok(new
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
-                    Firstname = user.FirstName,
-                    Lastname = user.LastName
+                    FullName = user.FullName
                 });
             }
             return Unauthorized();
@@ -82,28 +85,20 @@ namespace Searching_Tool_Assignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] RegisterDTO model)
         {
-            var userExists = await _userManager.FindByNameAsync(model.Username);
-            if (userExists != null)
+            
+            if (await _userManager.FindByNameAsync(model.Username) != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { Status = "Error", Message = "User already exists!" });
+            if (!await _roleManager.RoleExistsAsync(model.Role))
+                return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { Status = "Error", Message = "Role does not exists!" });
 
-            ApplicationUser user = new()
-            {
-                FullName = model.FullName,
-                Email = model.Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username,
-                Password = model.Password,
-                FirstName = model.FirstName,
-                LastName = model.LastName
-            };
+            var user = _mapper.Map<ApplicationUser>(model);
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
-            if (await _roleManager.RoleExistsAsync(model.Role))
-            {
-                await _userManager.AddToRoleAsync(user, model.Role);
-            }
+
+            await _userManager.AddToRoleAsync(user, model.Role);
+            
             return Ok(new ResponseDTO { Status = "Success", Message = "User created successfully!" });
         }
     }
