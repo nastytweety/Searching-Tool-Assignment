@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Searching_Tool_Assignment.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class SourcesController : ControllerBase
     {
@@ -24,7 +24,7 @@ namespace Searching_Tool_Assignment.Controllers
         // GET: Sources
         [HttpGet]
         [Authorize(Roles = UserRoles.User+","+UserRoles.Admin)]
-        public async Task<ActionResult<IEnumerable<Source>>> GetSources()
+        public async Task<ActionResult<IEnumerable<Source>>> GetSource()
         {
           if (_context.Sources == null)
           {
@@ -56,7 +56,7 @@ namespace Searching_Tool_Assignment.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         [Authorize(Roles = UserRoles.Admin)]
-        public async Task<IActionResult> EditSource(int id, Source source)
+        public async Task<IActionResult> PutSource(int id, Source source)
         {
             if (id != source.Id)
             {
@@ -88,7 +88,7 @@ namespace Searching_Tool_Assignment.Controllers
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         [Authorize(Roles = UserRoles.Admin)]
-        public async Task<ActionResult<Source>> AddSource(Source source)
+        public async Task<ActionResult<Source>> PostSource(Source source)
         {
           if (_context.Sources == null)
           {

@@ -10,7 +10,7 @@ using AutoMapper;
 
 namespace Searching_Tool_Assignment.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AuthController : ControllerBase
     {

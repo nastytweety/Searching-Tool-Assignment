@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Searching_Tool_Assignment.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
 
     public class TickersController : ControllerBase
@@ -30,7 +30,7 @@ namespace Searching_Tool_Assignment.Controllers
 
         [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         [HttpGet("{SourceName}")]
-        public async Task<ActionResult<List<Ticker>>> FetchPricesFromSource(string SourceName)
+        public async Task<ActionResult<List<Ticker>>> GetTickers(string SourceName)
         {
 
             if (SourceName == null)
@@ -67,7 +67,7 @@ namespace Searching_Tool_Assignment.Controllers
 
         [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         [HttpGet]
-        public async Task<ActionResult<List<Ticker>>> FetchPricesHistory([FromQuery] string? FilterBySource,[FromQuery]string? FilterByDate, [FromQuery]string? OrderBy, [FromQuery]int? Page)
+        public async Task<ActionResult<List<Ticker>>> GetTickersHistory([FromQuery] string? FilterBySource,[FromQuery]string? FilterByDate, [FromQuery]string? OrderBy, [FromQuery]int? Page)
         {
             if (_context.Tickers == null)
             {
@@ -139,7 +139,7 @@ namespace Searching_Tool_Assignment.Controllers
 
         [HttpDelete]
         [Authorize(Roles = UserRoles.Admin)]
-        public async Task<IActionResult> DeletePricesHistory()
+        public async Task<IActionResult> DeleteTickersHistory()
         {
             if (_context.Tickers == null)
             {

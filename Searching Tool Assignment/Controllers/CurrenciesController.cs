@@ -10,7 +10,7 @@ using Searching_Tool_Assignment.Models;
 
 namespace Searching_Tool_Assignment.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = UserRoles.Admin)]
     public class CurrenciesController : ControllerBase
@@ -24,7 +24,7 @@ namespace Searching_Tool_Assignment.Controllers
 
         // GET: api/Currencies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Currency>>> GetCurrencies()
+        public async Task<ActionResult<IEnumerable<Currency>>> GetCurrency()
         {
           if (_context.Currencies == null)
           {
@@ -54,7 +54,7 @@ namespace Searching_Tool_Assignment.Controllers
         // POST: api/Currencies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Currency>> AddCurrency(Currency currency)
+        public async Task<ActionResult<Currency>> PostCurrency(Currency currency)
         {
           if (_context.Currencies == null)
           {
