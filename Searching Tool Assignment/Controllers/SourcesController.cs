@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Searching_Tool_Assignment.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -55,29 +50,6 @@ namespace Searching_Tool_Assignment.Controllers
             return Ok(source);
         }
 
-        // PUT: Sources/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        [Authorize(Roles = UserRoles.Admin)]
-        public async Task<IActionResult> PutSource(int id, Source source)
-        {
-            if (id != source.Id)
-            {
-                return BadRequest();
-            }
-
-            try
-            {
-                _unitOfWork.Save();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                throw (new Exception("Entity did not modified!"));
-            }
-
-            return NoContent();
-        }
-
         // POST: Sources
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
@@ -112,11 +84,6 @@ namespace Searching_Tool_Assignment.Controllers
             _unitOfWork.Save();
 
             return Ok();
-        }
-
-        private bool SourceExists(int id)
-        {
-            return (_context.Sources?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
