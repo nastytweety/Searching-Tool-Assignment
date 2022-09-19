@@ -2,8 +2,7 @@
 
 namespace Searching_Tool_Assignment.Repositories
 {
-    public interface ICurrencyrepository
+    public interface ICurrencyrepository : IRepository<Currency>
     {
-        Task<IEnumerable<Currency>> GetAll();
     }
 }

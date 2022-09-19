@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Searching_Tool_Assignment.Models;
 using Microsoft.AspNetCore.Authorization;
+using Searching_Tool_Assignment.Repositories;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -15,10 +16,12 @@ namespace Searching_Tool_Assignment.Controllers
     public class SourcesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly UnitOfWork _unitOfWork;
 
-        public SourcesController(ApplicationDbContext context)
+        public SourcesController(ApplicationDbContext context,UnitOfWork unitOfWork)
         {
             _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Sources
@@ -26,11 +29,11 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.User+","+UserRoles.Admin)]
         public async Task<ActionResult<IEnumerable<Source>>> GetSource()
         {
-          if (_context.Sources == null)
+          if (_unitOfWork.Sources == null)
           {
               return NotFound();
           }
-            return await _context.Sources.ToListAsync();
+            return Ok(_unitOfWork.Sources.GetAll());
         }
 
         // GET: Sources/5
@@ -38,18 +41,18 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         public async Task<ActionResult<Source>> GetSource(int id)
         {
-          if (_context.Sources == null)
+          if (_unitOfWork.Sources == null)
           {
               return NotFound();
           }
-            var source = await _context.Sources.FindAsync(id);
+            var source = await _unitOfWork.Sources.Get(id);
 
             if (source == null)
             {
                 return NotFound();
             }
 
-            return source;
+            return Ok(source);
         }
 
         // PUT: Sources/5
@@ -63,22 +66,13 @@ namespace Searching_Tool_Assignment.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(source).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _unitOfWork.Save();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SourceExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw (new Exception("Entity did not modified!"));
             }
 
             return NoContent();
@@ -90,12 +84,11 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<ActionResult<Source>> PostSource(Source source)
         {
-          if (_context.Sources == null)
+          if (_unitOfWork.Sources == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Sources'  is null.");
           }
-            _context.Sources.Add(source);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Sources.Add(source);
 
             return CreatedAtAction("GetSource", new { id = source.Id }, source);
         }
@@ -105,20 +98,20 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteSource(int id)
         {
-            if (_context.Sources == null)
+            if (_unitOfWork.Sources == null)
             {
                 return NotFound();
             }
-            var source = await _context.Sources.FindAsync(id);
+            var source = await _unitOfWork.Sources.Get(id);
             if (source == null)
             {
                 return NotFound();
             }
 
-            _context.Sources.Remove(source);
-            await _context.SaveChangesAsync();
+            _unitOfWork.Sources.Remove(source);
+            _unitOfWork.Save();
 
-            return NoContent();
+            return Ok();
         }
 
         private bool SourceExists(int id)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Searching_Tool_Assignment.Models;
+using Searching_Tool_Assignment.Repositories;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -15,40 +16,40 @@ namespace Searching_Tool_Assignment.Controllers
     [Authorize(Roles = UserRoles.Admin)]
     public class CurrenciesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly UnitOfWork _unitofWork;
 
-        public CurrenciesController(ApplicationDbContext context)
+        public CurrenciesController(UnitOfWork unitofWork)
         {
-            _context = context;
+            _unitofWork = unitofWork;
         }
 
         // GET: api/Currencies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Currency>>> GetCurrency()
+        public ActionResult<IEnumerable<Currency>> GetCurrency()
         {
-          if (_context.Currencies == null)
+          if (_unitofWork.Currencies == null)
           {
               return NotFound();
           }
-            return await _context.Currencies.ToListAsync();
+            return Ok(_unitofWork.Currencies.GetAll());
         }
 
         // GET: api/Currencies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Currency>> GetCurrency(int id)
         {
-          if (_context.Currencies == null)
+          if (_unitofWork.Currencies == null)
           {
               return NotFound();
           }
-            var currency = await _context.Currencies.FindAsync(id);
+            var currency = await _unitofWork.Currencies.Get(id);
 
             if (currency == null)
             {
                 return NotFound();
             }
 
-            return currency;
+            return Ok(currency);
         }
 
         // POST: api/Currencies
@@ -56,12 +57,11 @@ namespace Searching_Tool_Assignment.Controllers
         [HttpPost]
         public async Task<ActionResult<Currency>> PostCurrency(Currency currency)
         {
-          if (_context.Currencies == null)
+          if (_unitofWork.Currencies == null)
           {
               return Problem("Entity set 'ApplicationDbContext.Currencies'  is null.");
           }
-            _context.Currencies.Add(currency);
-            await _context.SaveChangesAsync();
+            _unitofWork.Currencies.Add(currency);
 
             return CreatedAtAction("GetCurrency", new { id = currency.CurrencyId }, currency);
         }
@@ -70,25 +70,20 @@ namespace Searching_Tool_Assignment.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCurrency(int id)
         {
-            if (_context.Currencies == null)
+            if (_unitofWork.Currencies == null)
             {
                 return NotFound();
             }
-            var currency = await _context.Currencies.FindAsync(id);
+            var currency = await _unitofWork.Currencies.Get(id);
             if (currency == null)
             {
                 return NotFound();
             }
 
-            _context.Currencies.Remove(currency);
-            await _context.SaveChangesAsync();
+            _unitofWork.Currencies.Remove(currency);
+            _unitofWork.Save();
 
-            return NoContent();
-        }
-
-        private bool CurrencyExists(int id)
-        {
-            return (_context.Currencies?.Any(e => e.CurrencyId == id)).GetValueOrDefault();
+            return Ok();
         }
     }
 }

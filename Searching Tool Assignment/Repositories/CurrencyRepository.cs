@@ -3,18 +3,13 @@ using Searching_Tool_Assignment.Models;
 
 namespace Searching_Tool_Assignment.Repositories
 {
-    public class CurrencyRepository : ICurrencyrepository
+    public class CurrencyRepository : Repository<Currency>,ICurrencyrepository
     {
         private readonly ApplicationDbContext _context;
 
-        public CurrencyRepository(ApplicationDbContext context)
+        public CurrencyRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
-        public async Task<IEnumerable<Currency>> GetAll()
-        {
-            return await _context.Currencies.ToListAsync();
-        }
     }
 }
