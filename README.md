@@ -1,4 +1,4 @@
-# Searching-Tool-Assignment is an example of consuming and providing webservices. It is designed for maximum extensibility. It provides the bitcoin to usd prices from two independent brokers.
+# Searching-Tool-Assignment is an example of consuming and providing webservices. It is designed for maximum extensibility. It provides the bitcoin to usd prices from two independent brokers. The examples illustrates the use of generic repository + unit of work deisgn pattern.
 
 Searching-Tool-Assignment requires athentication/authorization. There are two types of users. User and Admin. The database is seeded automatically when applied the latest migration. Two users are seeded in db.
 
