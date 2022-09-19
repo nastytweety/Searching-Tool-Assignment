@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Searching_Tool_Assignment.Services;
 using Microsoft.AspNetCore.Authorization;
+using Searching_Tool_Assignment.Repositories;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -20,30 +21,36 @@ namespace Searching_Tool_Assignment.Controllers
 
     public class TickersController : ControllerBase
     {
+        private readonly IUnitOfWork _unitofwork;
         private readonly ApplicationDbContext _context;
         private readonly IApplicationService _applicationService;
-        public TickersController(ApplicationDbContext context, IApplicationService appservice)
+        public TickersController(IUnitOfWork unitofwork, ApplicationDbContext context, IApplicationService appservice)
         {
+            _unitofwork = unitofwork;
             _context = context;
             _applicationService = appservice;
         }
 
         [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         [HttpGet("{SourceName}")]
-        public async Task<ActionResult<List<Ticker>>> GetTickers(string SourceName)
+        public async Task<ActionResult<IEnumerable<Ticker>>> GetTickers(string SourceName)
         {
-
+            Source source = new Source();
             if (SourceName == null)
             {
                 return BadRequest();
             }
-            else if (await _context.Sources.Where(x => x.Name == SourceName).SingleOrDefaultAsync() == null)
+            else if (!_unitofwork.Sources.SourceExists(SourceName).Result)
             {
                 return NotFound();
             }
+            else
+            {
+                source = _unitofwork.Sources.Get(SourceName).Result;
+            }
 
-            Source source = await _context.Sources.Where(x => x.Name == SourceName).SingleAsync();
-            List<Currency> currencies = await _context.Currencies.ToListAsync();
+            
+            IEnumerable<Currency> currencies = _unitofwork.Currencies.GetAll().Result;
             List<Ticker> result = new List<Ticker>();
 
             using (var client = _applicationService.GetHttpClient(source.BaseURL))
@@ -151,11 +158,6 @@ namespace Searching_Tool_Assignment.Controllers
 
             return NoContent();
 
-        }
-
-        private bool TickerExists(int id)
-        {
-            return (_context.Tickers?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

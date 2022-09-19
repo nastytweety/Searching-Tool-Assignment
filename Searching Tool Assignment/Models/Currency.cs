@@ -8,7 +8,10 @@ namespace Searching_Tool_Assignment.Models
         [Key]
         [JsonIgnore]
         public int CurrencyId { get; set; }
+
+        [Required(ErrorMessage = "Currency is required")]
         public string CurrencyName { get; set; }
+        [Required(ErrorMessage = "Extension is required")]
         public string Extension { get; set; }
     }
 }

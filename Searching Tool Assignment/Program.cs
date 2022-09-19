@@ -8,6 +8,7 @@ using Searching_Tool_Assignment.Services;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Searching_Tool_Assignment.Mappings;
+using Searching_Tool_Assignment.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ ConfigurationManager configuration = builder.Configuration;
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("ConnStr")));
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
