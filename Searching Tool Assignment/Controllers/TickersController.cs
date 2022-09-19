@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 using Searching_Tool_Assignment.Services;
 using Microsoft.AspNetCore.Authorization;
 using Searching_Tool_Assignment.Repositories;
+using Searching_Tool_Assignment.DTOs;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -48,7 +49,7 @@ namespace Searching_Tool_Assignment.Controllers
             }
 
             
-            IEnumerable<Currency> currencies = _unitofwork.Currencies.GetAll().Result;
+            IEnumerable<Currency> currencies = _unitofwork.Currencies.GetAll();
             List<Ticker> result = new List<Ticker>();
 
             using (var client = _applicationService.GetHttpClient(source.BaseURL))
@@ -79,16 +80,11 @@ namespace Searching_Tool_Assignment.Controllers
                 return NotFound();
             }
 
-            var tickers = _unitofwork.Tickers.GetAll();
+            IEnumerable<Ticker> tickers = _unitofwork.Tickers.GetAll();
 
-            if (tickers == null)
+            if (FilterBySource != null)
             {
-                return NotFound();
-            }
-
-            if(FilterBySource != null)
-            {
-                if(_unitofwork.Sources.Get(FilterBySource) != null)
+                if(_unitofwork.Sources.Get(FilterBySource).Result!= null)
                 {
                     tickers = tickers.Where(x => x.Source == FilterBySource).ToList();
                 }
@@ -133,13 +129,14 @@ namespace Searching_Tool_Assignment.Controllers
                     }
                 }
             }
+            int TotalPages= 0;
             if(Page != null && Page>=1)
             {
                 var PageResults = 5f;
-                var TotalPages = Math.Ceiling(tickers.Count() / PageResults);
+                TotalPages = Convert.ToInt32(Math.Ceiling(tickers.Count() / PageResults));
                 tickers = tickers.Skip((Page.Value - 1) * (int)PageResults).Take((int)PageResults).ToList();
             }
-            return Ok(tickers);
+            return Ok(new TickerDTO { Pages = TotalPages, Tickers = tickers});
         }
 
         [HttpDelete]
