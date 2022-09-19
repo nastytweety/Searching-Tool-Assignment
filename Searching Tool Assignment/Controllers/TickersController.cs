@@ -22,12 +22,10 @@ namespace Searching_Tool_Assignment.Controllers
     public class TickersController : ControllerBase
     {
         private readonly IUnitOfWork _unitofwork;
-        private readonly ApplicationDbContext _context;
         private readonly IApplicationService _applicationService;
-        public TickersController(IUnitOfWork unitofwork, ApplicationDbContext context, IApplicationService appservice)
+        public TickersController(IUnitOfWork unitofwork, IApplicationService appservice)
         {
             _unitofwork = unitofwork;
-            _context = context;
             _applicationService = appservice;
         }
 
@@ -64,8 +62,8 @@ namespace Searching_Tool_Assignment.Controllers
                         JObject obj = JObject.Parse(Response);
                         Ticker tick = _applicationService.GetTicker(obj, source, currency.CurrencyName);
                         result.Add(tick);
-                        _context.Tickers.Add(tick);
-                        await _context.SaveChangesAsync();
+                        _unitofwork.Tickers.Add(tick);
+                        _unitofwork.Save();
                     }
                 }
             }
@@ -76,12 +74,12 @@ namespace Searching_Tool_Assignment.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Ticker>>> GetTickersHistory([FromQuery] string? FilterBySource,[FromQuery]string? FilterByDate, [FromQuery]string? OrderBy, [FromQuery]int? Page)
         {
-            if (_context.Tickers == null)
+            if (_unitofwork.Tickers == null)
             {
                 return NotFound();
             }
 
-            var tickers = await _context.Tickers.ToListAsync();
+            var tickers = _unitofwork.Tickers.GetAll();
 
             if (tickers == null)
             {
@@ -90,7 +88,7 @@ namespace Searching_Tool_Assignment.Controllers
 
             if(FilterBySource != null)
             {
-                if(_context.Sources.Where(x => x.Name == FilterBySource).FirstOrDefault() != null)
+                if(_unitofwork.Sources.Get(FilterBySource) != null)
                 {
                     tickers = tickers.Where(x => x.Source == FilterBySource).ToList();
                 }
@@ -148,15 +146,15 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteTickersHistory()
         {
-            if (_context.Tickers == null)
+            if (_unitofwork.Tickers == null)
             {
                 return NotFound();
             }
 
-            _context.Tickers.RemoveRange(_context.Tickers);
-            await _context.SaveChangesAsync();
+            _unitofwork.Tickers.RemoveAll(_unitofwork.Tickers.GetAll());
+            _unitofwork.Save();
 
-            return NoContent();
+            return Ok();
 
         }
     }

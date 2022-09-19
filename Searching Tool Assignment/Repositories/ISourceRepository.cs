@@ -2,7 +2,7 @@
 
 namespace Searching_Tool_Assignment.Repositories
 {
-    public interface ISourceRepository
+    public interface ISourceRepository : IRepository<Source>
     {
         Task<bool> SourceExists(string sourceName);
 

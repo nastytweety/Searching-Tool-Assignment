@@ -3,13 +3,12 @@ using Searching_Tool_Assignment.Models;
 
 namespace Searching_Tool_Assignment.Repositories
 {
-    public class SourceRepository : ISourceRepository
+    public class SourceRepository : Repository<Source>,ISourceRepository
     {
         private readonly ApplicationDbContext _context;
 
-        public SourceRepository(ApplicationDbContext context)
+        public SourceRepository(ApplicationDbContext context) : base(context)
         {
-            _context = context;
         }
 
         public async Task<bool> SourceExists(string sourceName)
