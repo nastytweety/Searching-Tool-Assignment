@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Searching_Tool_Assignment.Repositories
+namespace Searching_Tool_Assignment.IRepositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
@@ -13,5 +13,7 @@ namespace Searching_Tool_Assignment.Repositories
         IEnumerable<TEntity> GetAll();
 
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+
+        void Update(TEntity entity);
     }
 }

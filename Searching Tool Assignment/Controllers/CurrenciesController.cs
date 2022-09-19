@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Searching_Tool_Assignment.IRepositories;
 using Searching_Tool_Assignment.Models;
 using Searching_Tool_Assignment.Repositories;
 
@@ -10,9 +11,9 @@ namespace Searching_Tool_Assignment.Controllers
     [Authorize(Roles = UserRoles.Admin)]
     public class CurrenciesController : ControllerBase
     {
-        private readonly UnitOfWork _unitofWork;
+        private readonly IUnitOfWork _unitofWork;
 
-        public CurrenciesController(UnitOfWork unitofWork)
+        public CurrenciesController(IUnitOfWork unitofWork)
         {
             _unitofWork = unitofWork;
         }

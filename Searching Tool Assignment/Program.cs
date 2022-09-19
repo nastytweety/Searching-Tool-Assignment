@@ -9,6 +9,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Searching_Tool_Assignment.Mappings;
 using Searching_Tool_Assignment.Repositories;
+using Searching_Tool_Assignment.IRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

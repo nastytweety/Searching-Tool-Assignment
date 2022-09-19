@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Searching_Tool_Assignment.IRepositories;
 using Searching_Tool_Assignment.Models;
 
 namespace Searching_Tool_Assignment.Repositories

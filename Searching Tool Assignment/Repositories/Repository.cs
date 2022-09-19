@@ -1,4 +1,6 @@
-﻿using Searching_Tool_Assignment.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Searching_Tool_Assignment.IRepositories;
+using Searching_Tool_Assignment.Models;
 using System.Linq.Expressions;
 
 namespace Searching_Tool_Assignment.Repositories
@@ -33,6 +35,12 @@ namespace Searching_Tool_Assignment.Repositories
         public void Remove(TEntity entity)
         {
             _context.Set<TEntity>().Remove(entity);
+        }
+
+        public void Update(TEntity entity)
+        {
+            _context.Set<TEntity>().Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
         }
     }
 }

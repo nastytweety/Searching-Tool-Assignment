@@ -1,4 +1,4 @@
-﻿namespace Searching_Tool_Assignment.Repositories
+﻿namespace Searching_Tool_Assignment.IRepositories
 {
     public interface IUnitOfWork : IDisposable
     {

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Searching_Tool_Assignment.Models;
 using Microsoft.AspNetCore.Authorization;
 using Searching_Tool_Assignment.Repositories;
+using Searching_Tool_Assignment.IRepositories;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -11,9 +12,9 @@ namespace Searching_Tool_Assignment.Controllers
     public class SourcesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public SourcesController(ApplicationDbContext context,UnitOfWork unitOfWork)
+        public SourcesController(ApplicationDbContext context,IUnitOfWork unitOfWork)
         {
             _context = context;
             _unitOfWork = unitOfWork;

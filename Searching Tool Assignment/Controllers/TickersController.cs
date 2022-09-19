@@ -5,6 +5,7 @@ using Searching_Tool_Assignment.Services;
 using Microsoft.AspNetCore.Authorization;
 using Searching_Tool_Assignment.Repositories;
 using Searching_Tool_Assignment.DTOs;
+using Searching_Tool_Assignment.IRepositories;
 
 namespace Searching_Tool_Assignment.Controllers
 {
