@@ -10,6 +10,7 @@ namespace Searching_Tool_Assignment.Repositories
 
         public TickerRepository(ApplicationDbContext context) : base(context)
         {
+            _context = context;
         }
 
         public async Task<IEnumerable<Ticker>> GetTickers(string SourceName)

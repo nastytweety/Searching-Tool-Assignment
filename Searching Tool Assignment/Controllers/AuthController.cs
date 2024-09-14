@@ -34,6 +34,8 @@ namespace Searching_Tool_Assignment.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginDTO model)
         {
+            if (!ModelState.IsValid)
+                return BadRequest();
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -83,9 +85,10 @@ namespace Searching_Tool_Assignment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterDTO model)
+        public async Task<ActionResult<ResponseDTO>> Register([FromBody] RegisterDTO model)
         {
-            
+            if (!ModelState.IsValid)
+                return BadRequest();
             if (await _userManager.FindByNameAsync(model.Username) != null)
                 return StatusCode(StatusCodes.Status500InternalServerError, new ResponseDTO { Status = "Error", Message = "User already exists!" });
             if (!await _roleManager.RoleExistsAsync(model.Role))

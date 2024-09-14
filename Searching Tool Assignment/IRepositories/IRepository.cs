@@ -4,13 +4,13 @@ namespace Searching_Tool_Assignment.IRepositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        void Add(TEntity entity);
+        Task Add(TEntity entity);
 
         void Remove(TEntity entity);
 
-        Task<TEntity> Get(int id);
+        Task<TEntity?> Get(int id);
 
-        IEnumerable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAll();
 
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 

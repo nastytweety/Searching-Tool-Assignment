@@ -22,9 +22,9 @@ namespace Searching_Tool_Assignment.Repositories
             _context.Dispose();
         }
 
-        public int Save()
+        public async Task Save()
         {
-            return _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

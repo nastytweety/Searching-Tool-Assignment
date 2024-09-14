@@ -10,17 +10,17 @@ namespace Searching_Tool_Assignment.Repositories
 
         public SourceRepository(ApplicationDbContext context) : base(context)
         {
+            _context = context;
         }
 
         public async Task<bool> SourceExists(string sourceName)
         {
-            if(await _context.Sources.Where(x => x.Name == sourceName).SingleOrDefaultAsync()!=null)
+            if(await _context.Sources.Where(x => x.Name == sourceName).SingleOrDefaultAsync() is not null)
                 return true;
-            else
-                return false;
+            return false;
         }
 
-        public async Task<Source> Get(string sourceName)
+        public async Task<Source?> Get(string sourceName)
         {
             return await _context.Sources.Where(x => x.Name == sourceName).SingleOrDefaultAsync();
         }

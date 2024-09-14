@@ -23,13 +23,13 @@ namespace Searching_Tool_Assignment.Controllers
         // GET: Sources
         [HttpGet]
         [Authorize(Roles = UserRoles.User+","+UserRoles.Admin)]
-        public async Task<ActionResult<IEnumerable<Source>>> GetSource()
+        public async Task<ActionResult<IEnumerable<Source>>> GetSources()
         {
-          if (_unitOfWork.Sources == null)
-          {
-              return NotFound();
-          }
-            return Ok(_unitOfWork.Sources.GetAll());
+            var sources = await _unitOfWork.Sources.GetAll();
+            if (_unitOfWork.Sources is null)
+                return NotFound();
+
+            return Ok(sources);
         }
 
         // GET: Sources/5
@@ -37,17 +37,10 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         public async Task<ActionResult<Source>> GetSource(int id)
         {
-          if (_unitOfWork.Sources == null)
-          {
-              return NotFound();
-          }
             var source = await _unitOfWork.Sources.Get(id);
-
             if (source == null)
-            {
                 return NotFound();
-            }
-
+            
             return Ok(source);
         }
 
@@ -57,12 +50,9 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<ActionResult<Source>> PostSource(Source source)
         {
-          if (_unitOfWork.Sources == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Sources'  is null.");
-          }
-            _unitOfWork.Sources.Add(source);
-
+            if (!ModelState.IsValid)
+                return BadRequest();
+            await _unitOfWork.Sources.Add(source);
             return CreatedAtAction("GetSource", new { id = source.Id }, source);
         }
 
@@ -71,19 +61,12 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteSource(int id)
         {
-            if (_unitOfWork.Sources == null)
-            {
-                return NotFound();
-            }
             var source = await _unitOfWork.Sources.Get(id);
-            if (source == null)
-            {
+            if (source is null)
                 return NotFound();
-            }
-
+            
             _unitOfWork.Sources.Remove(source);
-            _unitOfWork.Save();
-
+            await _unitOfWork.Save();
             return Ok();
         }
     }

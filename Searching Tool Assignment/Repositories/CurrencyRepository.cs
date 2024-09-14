@@ -10,6 +10,7 @@ namespace Searching_Tool_Assignment.Repositories
 
         public CurrencyRepository(ApplicationDbContext context) : base(context)
         {
+            _context = context;
         }
 
     }

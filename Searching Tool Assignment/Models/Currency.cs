@@ -10,8 +10,8 @@ namespace Searching_Tool_Assignment.Models
         public int CurrencyId { get; set; }
 
         [Required(ErrorMessage = "Currency is required")]
-        public string CurrencyName { get; set; }
+        public string CurrencyName { get; set; } = String.Empty;
         [Required(ErrorMessage = "Extension is required")]
-        public string Extension { get; set; }
+        public string Extension { get; set; } = String.Empty;
     }
 }

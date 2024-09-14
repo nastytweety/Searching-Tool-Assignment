@@ -6,6 +6,6 @@ namespace Searching_Tool_Assignment.IRepositories
     {
         Task<bool> SourceExists(string sourceName);
 
-        Task<Source> Get(string sourceName);
+        Task<Source?> Get(string sourceName);
     }
 }

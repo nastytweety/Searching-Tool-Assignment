@@ -12,9 +12,9 @@ namespace Searching_Tool_Assignment.Repositories
         {
             _context = context;
         }
-        public void Add(TEntity entity)
+        public async Task Add(TEntity entity)
         {
-            _context.Set<TEntity>().Add(entity);
+            await _context.Set<TEntity>().AddAsync(entity);
         }
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
@@ -22,14 +22,14 @@ namespace Searching_Tool_Assignment.Repositories
             return _context.Set<TEntity>().Where(predicate).ToList();
         }
 
-        public async Task<TEntity> Get(int id)
+        public async Task<TEntity?> Get(int id)
         {
             return await _context.Set<TEntity>().FindAsync(id);
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public async Task<IEnumerable<TEntity>> GetAll()
         {
-            return _context.Set<TEntity>().ToList();
+            return await _context.Set<TEntity>().ToListAsync();
         }
 
         public void Remove(TEntity entity)

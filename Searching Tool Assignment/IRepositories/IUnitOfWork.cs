@@ -5,6 +5,6 @@
         ITickerRepository Tickers { get; }
         ISourceRepository Sources { get; }
         ICurrencyrepository Currencies { get; }
-        int Save();
+        Task Save();
     }
 }

@@ -26,22 +26,15 @@ namespace Searching_Tool_Assignment.Controllers
         [HttpGet("{SourceName}")]
         public async Task<ActionResult<IEnumerable<Ticker>>> GetTickers(string SourceName)
         {
-            Source source = new Source();
-            if (SourceName == null)
-            {
+            if (SourceName is null)
                 return BadRequest();
-            }
-            else if (!_unitofwork.Sources.SourceExists(SourceName).Result)
-            {
-                return NotFound();
-            }
-            else
-            {
-                source = _unitofwork.Sources.Get(SourceName).Result;
-            }
-
             
-            IEnumerable<Currency> currencies = _unitofwork.Currencies.GetAll();
+            if (!await _unitofwork.Sources.SourceExists(SourceName))
+                return NotFound();
+            
+            var source = await _unitofwork.Sources.Get(SourceName);
+            
+            IEnumerable<Currency> currencies = await _unitofwork.Currencies.GetAll();
             List<Ticker> result = new List<Ticker>();
 
             using (var client = _applicationService.GetHttpClient(source.BaseURL))
@@ -55,8 +48,8 @@ namespace Searching_Tool_Assignment.Controllers
                         JObject obj = JObject.Parse(Response);
                         Ticker tick = _applicationService.GetTicker(obj, source, currency.CurrencyName);
                         result.Add(tick);
-                        _unitofwork.Tickers.Add(tick);
-                        _unitofwork.Save();
+                        await _unitofwork.Tickers.Add(tick);
+                        await _unitofwork.Save();
                     }
                 }
             }
@@ -67,58 +60,37 @@ namespace Searching_Tool_Assignment.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Ticker>>> GetTickersHistory([FromQuery] string? FilterBySource,[FromQuery]string? FilterByDate, [FromQuery]string? OrderBy, [FromQuery]int? Page)
         {
-            if (_unitofwork.Tickers == null)
+            IEnumerable<Ticker> tickers = await _unitofwork.Tickers.GetAll();
+
+            if (FilterBySource is not null)
             {
+                if (await _unitofwork.Sources.Get(FilterBySource) != null)
+                    tickers = tickers.Where(x => x.Source == FilterBySource).ToList();
+
                 return NotFound();
             }
-
-            IEnumerable<Ticker> tickers = _unitofwork.Tickers.GetAll();
-
-            if (FilterBySource != null)
+            if(FilterByDate is not null)
             {
-                if(_unitofwork.Sources.Get(FilterBySource).Result!= null)
-                {
-                    tickers = tickers.Where(x => x.Source == FilterBySource).ToList();
-                }
-                else
-                {
-                    return NotFound();
-                }
-            }
-            if(FilterByDate != null)
-            {
-                if(tickers.Where(x => x.CreatedDate == FilterByDate).ToList()!=null)
-                {
+                if (tickers.Where(x => x.CreatedDate == FilterByDate).ToList() != null)
                     tickers = tickers.Where(x => x.CreatedDate == FilterByDate).ToList();
-                }
-                else
-                {
-                    return NotFound();
-                }
+
+                return NotFound();
             }
-            if (OrderBy != null)
+            if (OrderBy is not null)
             {
                 if(OrderBy == "Price"|| OrderBy == "price")
                 {
-                    if (tickers != null)
-                    {
+                    if (tickers is not null)
                         tickers = tickers.OrderBy(x => x.Price).ToList();
-                    }
-                    else
-                    {
-                        return NotFound();
-                    }
+
+                    return NotFound();
                 }
                 if(OrderBy == "Date" || OrderBy == "date")
                 {
-                    if (tickers != null)
-                    {
+                    if (tickers is not null)
                         tickers = tickers.OrderBy(x => x.CreatedDate).ToList();
-                    }
-                    else
-                    {
-                        return NotFound();
-                    }
+
+                    return NotFound();
                 }
             }
             int TotalPages= 0;
@@ -135,16 +107,10 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteTickersHistory()
         {
-            if (_unitofwork.Tickers == null)
-            {
-                return NotFound();
-            }
-
-            _unitofwork.Tickers.RemoveAll(_unitofwork.Tickers.GetAll());
-            _unitofwork.Save();
+            _unitofwork.Tickers.RemoveAll(await _unitofwork.Tickers.GetAll());
+            await _unitofwork.Save();
 
             return Ok();
-
         }
     }
 }
