@@ -12,7 +12,7 @@ namespace Searching_Tool_Assignment.IRepositories
 
         Task<IEnumerable<TEntity>> GetAll();
 
-        IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
+        Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate);
 
         void Update(TEntity entity);
     }

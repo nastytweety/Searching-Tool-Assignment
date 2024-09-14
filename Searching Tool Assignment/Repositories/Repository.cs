@@ -17,9 +17,9 @@ namespace Searching_Tool_Assignment.Repositories
             await _context.Set<TEntity>().AddAsync(entity);
         }
 
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
+        public async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
         {
-            return _context.Set<TEntity>().Where(predicate).ToList();
+            return await _context.Set<TEntity>().Where(predicate).ToListAsync();
         }
 
         public async Task<TEntity?> Get(int id)
@@ -41,6 +41,7 @@ namespace Searching_Tool_Assignment.Repositories
         {
             _context.Set<TEntity>().Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
+            _context.Update<TEntity>(entity);
         }
     }
 }
