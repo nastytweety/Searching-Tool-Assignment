@@ -48,11 +48,11 @@ namespace Searching_Tool_Assignment.Controllers
                         JObject obj = JObject.Parse(Response);
                         Ticker tick = _applicationService.GetTicker(obj, source, currency.CurrencyName);
                         result.Add(tick);
-                        await _unitofwork.Tickers.Add(tick);
-                        await _unitofwork.Save();
                     }
                 }
             }
+            await _unitofwork.Tickers.AddRange(result);
+            await _unitofwork.Save();
             return result;
         }
 
@@ -107,10 +107,14 @@ namespace Searching_Tool_Assignment.Controllers
         [Authorize(Roles = UserRoles.Admin)]
         public async Task<IActionResult> DeleteTickersHistory()
         {
-            _unitofwork.Tickers.RemoveAll(await _unitofwork.Tickers.GetAll());
-            await _unitofwork.Save();
-
-            return Ok();
+            var tickers = await _unitofwork.Tickers.GetAll();
+            if(tickers is not null)
+            {
+                _unitofwork.Tickers.RemoveAll(tickers);
+                await _unitofwork.Save();
+                return Ok();
+            }
+            return NotFound();
         }
     }
 }

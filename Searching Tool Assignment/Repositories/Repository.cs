@@ -17,6 +17,11 @@ namespace Searching_Tool_Assignment.Repositories
             await _context.Set<TEntity>().AddAsync(entity);
         }
 
+        public async Task AddRange(IEnumerable<TEntity> entities)
+        {
+            await _context.Set<TEntity>().AddRangeAsync(entities);
+        }
+
         public async Task<IEnumerable<TEntity>> Find(Expression<Func<TEntity, bool>> predicate)
         {
             return await _context.Set<TEntity>().Where(predicate).ToListAsync();

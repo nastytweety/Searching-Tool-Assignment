@@ -15,7 +15,7 @@ namespace Searching_Tool_Assignment.Repositories
 
         public async Task<bool> SourceExists(string sourceName)
         {
-            if(await _context.Sources.Where(x => x.Name == sourceName).SingleOrDefaultAsync() is not null)
+            if(await _context.Sources.Where(x => x.Name == sourceName).AsNoTracking().SingleOrDefaultAsync() is not null)
                 return true;
             return false;
         }

@@ -11,12 +11,10 @@ namespace Searching_Tool_Assignment.Controllers
     [ApiController]
     public class SourcesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork _unitOfWork;
 
-        public SourcesController(ApplicationDbContext context,IUnitOfWork unitOfWork)
+        public SourcesController(IUnitOfWork unitOfWork)
         {
-            _context = context;
             _unitOfWork = unitOfWork;
         }
 

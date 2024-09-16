@@ -6,6 +6,8 @@ namespace Searching_Tool_Assignment.IRepositories
     {
         Task Add(TEntity entity);
 
+        Task AddRange(IEnumerable<TEntity> entities);
+
         void Remove(TEntity entity);
 
         Task<TEntity?> Get(int id);
