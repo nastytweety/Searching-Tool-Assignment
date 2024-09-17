@@ -15,7 +15,8 @@ namespace Searching_Tool_Assignment.Repositories
 
         public async Task<IEnumerable<Ticker>> GetTickers(string SourceName)
         {
-            return await _context.Tickers.Where(x=>x.Equals(SourceName)).AsNoTracking().ToListAsync();
+            var tickers = _context.Tickers.AsNoTracking();
+            return await tickers.Where(x=>x.Equals(SourceName)).ToListAsync();
         }
 
 

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Searching_Tool_Assignment.IRepositories;
 using Searching_Tool_Assignment.Models;
-using Searching_Tool_Assignment.Repositories;
 
 namespace Searching_Tool_Assignment.Controllers
 {

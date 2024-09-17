@@ -15,14 +15,16 @@ namespace Searching_Tool_Assignment.Repositories
 
         public async Task<bool> SourceExists(string sourceName)
         {
-            if(await _context.Sources.Where(x => x.Name == sourceName).AsNoTracking().SingleOrDefaultAsync() is not null)
+            var sources = _context.Sources.AsNoTracking();
+            if (await sources.Where(x => x.Name == sourceName).SingleOrDefaultAsync() is not null)
                 return true;
             return false;
         }
 
         public async Task<Source?> Get(string sourceName)
         {
-            return await _context.Sources.Where(x => x.Name == sourceName).SingleOrDefaultAsync();
+            var sources = _context.Sources.AsNoTracking();
+            return await sources.Where(x => x.Name == sourceName).SingleOrDefaultAsync();
         }
     }
 }
