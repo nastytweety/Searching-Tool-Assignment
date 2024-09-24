@@ -4,6 +4,7 @@ using Searching_Tool_Assignment.Models;
 using Microsoft.AspNetCore.Authorization;
 using Searching_Tool_Assignment.Repositories;
 using Searching_Tool_Assignment.IRepositories;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -19,6 +20,7 @@ namespace Searching_Tool_Assignment.Controllers
         }
 
         // GET: Sources
+        [OutputCache(Duration = 1000, PolicyName = nameof(CachePolicy))]
         [HttpGet]
         [Authorize(Roles = UserRoles.User+","+UserRoles.Admin)]
         public async Task<ActionResult<IEnumerable<Source>>> GetSources()

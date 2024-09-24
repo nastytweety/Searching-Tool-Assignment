@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Searching_Tool_Assignment.Mappings;
 using Searching_Tool_Assignment.Repositories;
 using Searching_Tool_Assignment.IRepositories;
+using Searching_Tool_Assignment;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,6 +83,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddOutputCache(options =>
+{
+    options.AddPolicy(nameof(CachePolicy), CachePolicy.Instance);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -95,7 +101,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseOutputCache();
 app.MapControllers();
 
 app.Run();

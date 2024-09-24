@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Searching_Tool_Assignment.IRepositories;
 using Searching_Tool_Assignment.Models;
 
@@ -18,6 +19,7 @@ namespace Searching_Tool_Assignment.Controllers
         }
 
         // GET: api/Currencies
+        [OutputCache(Duration = 1000, PolicyName = nameof(CachePolicy))]
         [HttpGet]
         public ActionResult<IEnumerable<Currency>> GetCurrency()
         {

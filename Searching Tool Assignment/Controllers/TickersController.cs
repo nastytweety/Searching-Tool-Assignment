@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Searching_Tool_Assignment.Repositories;
 using Searching_Tool_Assignment.DTOs;
 using Searching_Tool_Assignment.IRepositories;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace Searching_Tool_Assignment.Controllers
 {
@@ -22,6 +23,7 @@ namespace Searching_Tool_Assignment.Controllers
             _applicationService = appservice;
         }
 
+        [OutputCache(Duration = 1000, PolicyName = nameof(CachePolicy))]
         [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         [HttpGet("{SourceName}")]
         public async Task<ActionResult<IEnumerable<Ticker>>> GetTickers(string SourceName)
@@ -56,6 +58,7 @@ namespace Searching_Tool_Assignment.Controllers
             return result;
         }
 
+        [OutputCache(Duration = 1000,PolicyName = nameof(CachePolicy))]
         [Authorize(Roles = UserRoles.User + "," + UserRoles.Admin)]
         [HttpGet]
         public async Task<ActionResult<List<Ticker>>> GetTickersHistory([FromQuery] string? FilterBySource,[FromQuery]string? FilterByDate, [FromQuery]string? OrderBy, [FromQuery]int? Page)
