@@ -1,6 +1,6 @@
 ﻿namespace Searching_Tool_Assignment.DTOs
 {
-    public class ResponseDTO
+    public record ResponseDTO
     {
         public string Status { get; set; } = String.Empty;
 

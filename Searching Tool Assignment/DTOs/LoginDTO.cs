@@ -2,7 +2,7 @@
 
 namespace Searching_Tool_Assignment.DTOs
 {
-    public class LoginDTO
+    public record LoginDTO
     {
         [Required(ErrorMessage = "User Name is required")]
         public string Username { get; set; } = String.Empty;

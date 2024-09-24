@@ -2,7 +2,7 @@
 
 namespace Searching_Tool_Assignment.DTOs
 {
-    public class RegisterDTO
+    public record RegisterDTO
     {
         [Required(ErrorMessage = "Fullname is required")]
         public string FullName { get; set; } = String.Empty;
