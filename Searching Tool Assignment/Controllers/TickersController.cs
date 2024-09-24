@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Searching_Tool_Assignment.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Newtonsoft.Json.Linq;
-using Searching_Tool_Assignment.Services;
-using Microsoft.AspNetCore.Authorization;
-using Searching_Tool_Assignment.Repositories;
 using Searching_Tool_Assignment.DTOs;
 using Searching_Tool_Assignment.IRepositories;
-using Microsoft.AspNetCore.OutputCaching;
+using Searching_Tool_Assignment.Models;
+using Searching_Tool_Assignment.Services;
 
 namespace Searching_Tool_Assignment.Controllers
 {

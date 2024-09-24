@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Searching_Tool_Assignment.Models;
-using Microsoft.AspNetCore.Authorization;
-using Searching_Tool_Assignment.Repositories;
-using Searching_Tool_Assignment.IRepositories;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using Searching_Tool_Assignment.IRepositories;
+using Searching_Tool_Assignment.Models;
 
 namespace Searching_Tool_Assignment.Controllers
 {

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Searching_Tool_Assignment.Models;
 
 namespace Searching_Tool_Assignment.Models
 {
